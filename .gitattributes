@@ -1,0 +1,9 @@
+/mvnw text eol=lf
+*.sh text eol=lf
+*.cmd text eol=crlf
+
+*.jar binary
+*.jpg binary
+*.png binary
+
+* text=auto
