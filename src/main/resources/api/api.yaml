@@ -1,0 +1,449 @@
+openapi: 3.1.0
+info:
+  title: Users API
+  description: API for managing users of the system
+  contact:
+    name: Paschalis Chomondozlis
+    url: https://pchomond.com
+    email: paschalis.chomondozlis@gmail.com
+  version: 1.0.0
+tags:
+  - name: profile
+  - name: users
+paths:
+  /internal/users:
+    post:
+      operationId: createUser
+      security:
+        - App2AppOauth:
+            - users:write
+      tags:
+        - users
+      summary: Create user
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: The request was successful, and a new resource was created.
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+      parameters: []
+      description: Creates a new user in the user store. The request must include the
+        user's email, given name and surname and optionally, the date of birth
+        and address.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+        required: true
+    get:
+      operationId: getUserList
+      security:
+        - App2AppOauth:
+            - users:read
+      tags:
+        - users
+      summary: Get user list
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UsersList"
+          description: The request was successful, and the server has returned a list of
+            all the User resources.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+      parameters: []
+      description: Get the user list stored in the user store.
+  /internal/users/{user_id}:
+    get:
+      operationId: getUser
+      security:
+        - App2AppOauth:
+            - users:read
+      tags:
+        - users
+      summary: Get user
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: The request was successful, and the server has returned the
+            requested User resource matching the user id.
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      description: Retrieve a user based on the provided id.
+    patch:
+      operationId: updateUser
+      security:
+        - App2AppOauth:
+            - users:write
+      tags:
+        - users
+      summary: Update user
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: The request was successful, and the server has returned the updated
+            User resource.
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      description: Updates an existing user in the user store.
+      requestBody:
+        required: true
+        description: Request containing all the fields that are requested to be updated
+          in the existing entry. Explicit null or empty string values indicate
+          deletion of the specific field.
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateUserRequest"
+    delete:
+      operationId: deleteUser
+      security:
+        - App2AppOauth:
+            - users:write
+      tags:
+        - users
+      summary: Delete user
+      parameters:
+        - $ref: "#/components/parameters/user_id"
+      responses:
+        "204":
+          $ref: "#/components/responses/NoContent"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+  /me:
+    get:
+      operationId: getProfile
+      tags:
+        - profile
+      summary: Get profile
+      security:
+        - BearerJwt: []
+      parameters: []
+      responses:
+        "200":
+          description: The request was successful, and the server has returned the
+            requested resource in the response body.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Profile"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/Forbidden"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "500":
+          $ref: "#/components/responses/InternalServerError"
+components:
+  schemas:
+    Date:
+      type: object
+      required:
+        - day
+        - month
+        - year
+      properties:
+        day:
+          type: integer
+        year:
+          type: integer
+        month:
+          type: integer
+      description: Date schema
+    User:
+      type: object
+      required:
+        - given_name
+        - surname
+        - email
+        - id
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        surname:
+          type: string
+        given_name:
+          type: string
+        address:
+          anyOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+        date_of_birth:
+          anyOf:
+            - $ref: "#/components/schemas/Date"
+            - type: "null"
+      description: A User represents an individual that interacts with the system.
+    Error:
+      type: object
+      required:
+        - message
+        - status
+        - details
+        - type
+        - title
+      properties:
+        type:
+          type: string
+          description: A machine-readable error code enum.
+        title:
+          type: string
+          description: A short, human-readable summary of the problem.
+        status:
+          type: integer
+          examples:
+            - 400
+          description: The HTTP status code (mirrors the response header).
+        details:
+          type: array
+          items:
+            $ref: "#/components/schemas/ErrorDetail"
+          description: A collection of specific field-level validation errors.
+        message:
+          type: string
+    Address:
+      type: object
+      required:
+        - country
+        - line1
+        - postal_code
+        - region
+        - city
+      properties:
+        city:
+          type: string
+        line1:
+          type: string
+        line2:
+          type:
+            - string
+            - "null"
+        region:
+          type: string
+        country:
+          type: string
+        postal_code:
+          type: string
+      description: Address schema
+    ErrorDetail:
+      type: object
+      required:
+        - field
+        - reason
+      properties:
+        field:
+          type: string
+          examples:
+            - user.email
+          description: The JSON path or name of the field that failed validation.
+        reason:
+          type: string
+          description: The specific reason the field was rejected.
+      description: Represents a single validation failure on a specific field.
+    CreateUserRequest:
+      type: object
+      required:
+        - email
+        - given_name
+        - surname
+      properties:
+        email:
+          type: string
+        address:
+          anyOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+        surname:
+          type: string
+        given_name:
+          type: string
+        date_of_birth:
+          anyOf:
+            - $ref: "#/components/schemas/Date"
+            - type: "null"
+      description: Data transfer object for creating a new User.
+      x-fiddle-dto-info:
+        baseSchemaName: User
+    UpdateUserRequest:
+      type: object
+      properties:
+        email:
+          type:
+            - string
+            - "null"
+        surname:
+          type:
+            - string
+            - "null"
+        given_name:
+          type:
+            - string
+            - "null"
+        address:
+          anyOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+        date_of_birth:
+          anyOf:
+            - $ref: "#/components/schemas/Date"
+            - type: "null"
+      required: []
+      description: Data transfer object for updating all fields of an existing User.
+      x-fiddle-dto-info:
+        baseSchemaName: User
+    UsersList:
+      type: object
+      properties:
+        users:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+      required:
+        - users
+      description: Data transfer object returning a list of User objects.
+    Profile:
+      type: object
+      properties:
+        given_name:
+          type: string
+        surname:
+          type: string
+        email:
+          type: string
+        address:
+          anyOf:
+            - $ref: "#/components/schemas/Address"
+            - type: "null"
+        date_of_birth:
+          anyOf:
+            - $ref: "#/components/schemas/Date"
+            - type: "null"
+      required:
+        - given_name
+        - surname
+        - email
+        - address
+      description: A Profile contains information tied to a user.
+  responses:
+    Conflict:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: The request could not be completed due to a conflict with the
+        current state of the resource. Resolve the conflict and try again.
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: The server cannot find the requested resource. The endpoint may be
+        invalid or the resource may no longer exist.
+    Forbidden:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: The server understood the request, but refuses to authorize it.
+        Ensure the client has appropriate permissions.
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: The server could not understand the request due to invalid syntax.
+        The client should modify the request and try again.
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: Authentication is required to access the requested resource. The
+        client must include the appropriate credentials.
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+      description: The server encountered an unexpected condition that prevented it
+        from fulfilling the request. Report the issue to the support team if it
+        persists.
+    NoContent:
+      description: The request was successful, but there is no content to return in
+        the response.
+  parameters:
+    user_id:
+      name: user_id
+      in: path
+      description: The ID of the user.
+      required: true
+      schema:
+        type: string
+      explode: false
+      style: simple
+      allowReserved: false
+  securitySchemes:
+    BearerJwt:
+      type: http
+      scheme: Bearer
+      description: "Jwt Auth: Authenticated requests contain a valid Json Web Token
+        (JWT) as part of the `Authorization: Bearer <JWT>` header."
+      bearerFormat: Json Web Token (JWT)
+    App2AppOauth:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://learn.openapis.org/oauth/2.0/token
+          scopes:
+            users:read: Read the users
+            users:write: Create/update the users
