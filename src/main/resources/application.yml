@@ -1,0 +1,19 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_LIQUIBASE_USER}
+    password: ${DB_LIQUIBASE_USER_PASS}
+
+  jpa:
+    properties:
+      hibernate:
+        default_schema: ${DB_SCHEMA}
+    hibernate:
+      ddl-auto: validate
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+    default-schema: ${DB_SCHEMA}
+    liquibase-schema: ${DB_SCHEMA}
+    user: ${LIQUIBASE_USER}
+    password: ${LIQUIBASE_PASSWORD}
