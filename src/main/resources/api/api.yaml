@@ -60,7 +60,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UsersList"
+                $ref: "#/components/schemas/UserList"
           description: The request was successful, and the server has returned a list of
             all the User resources.
         "401":
@@ -341,7 +341,7 @@ components:
       description: Data transfer object for updating all fields of an existing User.
       x-fiddle-dto-info:
         baseSchemaName: User
-    UsersList:
+    UserList:
       type: object
       properties:
         users:

@@ -4,7 +4,7 @@ import org.openapitools.api.UsersApi;
 import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.UpdateUserRequest;
 import org.openapitools.model.User;
-import org.openapitools.model.UsersList;
+import org.openapitools.model.UserList;
 import org.springframework.http.ResponseEntity;
 
 public class UsersController implements UsersApi {
@@ -25,7 +25,7 @@ public class UsersController implements UsersApi {
     }
 
     @Override
-    public ResponseEntity<UsersList> getUserList() {
+    public ResponseEntity<UserList> getUserList() {
         return null;
     }
 
