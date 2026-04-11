@@ -11,9 +11,8 @@ spring:
     hibernate:
       ddl-auto: validate
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
+    change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
     default-schema: ${DB_SCHEMA}
-    liquibase-schema: ${DB_SCHEMA}
-    user: ${LIQUIBASE_USER}
-    password: ${LIQUIBASE_PASSWORD}
+    user: ${DB_LIQUIBASE_USER}
+    password: ${DB_LIQUIBASE_USER_PASS}
