@@ -12,11 +12,12 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
 
     public User createAndValidateUser(CreateUserRequest createUserRequest) {
-        UserEntity user = UserMapper.toUserEntity(createUserRequest);
-        var persistedUser = userRepository.save(user);
-        return UserMapper.toUser(persistedUser);
+        var mappedUser = userMapper.toUserEntity(createUserRequest);
+        UserEntity persistedUser = userRepository.save(mappedUser);
+        return userMapper.toUser(persistedUser);
     }
 }

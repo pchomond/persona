@@ -6,12 +6,14 @@ import org.openapitools.model.Address;
 import org.openapitools.model.BirthDate;
 import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.User;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 
+@Service
 public class UserMapper {
 
-    public static UserEntity toUserEntity(CreateUserRequest createUserRequest) {
+    public UserEntity toUserEntity(CreateUserRequest createUserRequest) {
         return UserEntity.builder()
                 .surname(createUserRequest.getSurname())
                 .givenName(createUserRequest.getGivenName())
@@ -43,7 +45,7 @@ public class UserMapper {
                     .build();
     }
 
-    public static User toUser(UserEntity userEntity) {
+    public User toUser(UserEntity userEntity) {
         return User.builder()
                 .email(userEntity.getEmail())
                 .givenName(userEntity.getGivenName())
