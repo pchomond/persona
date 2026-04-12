@@ -185,7 +185,7 @@ paths:
           $ref: "#/components/responses/InternalServerError"
 components:
   schemas:
-    Date:
+    BirthDate:
       type: object
       required:
         - day
@@ -198,7 +198,7 @@ components:
           type: integer
         month:
           type: integer
-      description: Date schema
+      description: BirthDate schema
     User:
       type: object
       required:
@@ -216,13 +216,9 @@ components:
         given_name:
           type: string
         address:
-          anyOf:
-            - $ref: "#/components/schemas/Address"
-            - type: "null"
+          $ref: "#/components/schemas/Address"
         date_of_birth:
-          anyOf:
-            - $ref: "#/components/schemas/Date"
-            - type: "null"
+          $ref: "#/components/schemas/BirthDate"
       description: A User represents an individual that interacts with the system.
     Error:
       type: object
@@ -300,20 +296,14 @@ components:
         email:
           type: string
         address:
-          anyOf:
-            - $ref: "#/components/schemas/Address"
-            - type: "null"
+          $ref: "#/components/schemas/Address"
         surname:
           type: string
         given_name:
           type: string
         date_of_birth:
-          anyOf:
-            - $ref: "#/components/schemas/Date"
-            - type: "null"
+          $ref: "#/components/schemas/BirthDate"
       description: Data transfer object for creating a new User.
-      x-fiddle-dto-info:
-        baseSchemaName: User
     UpdateUserRequest:
       type: object
       properties:
@@ -335,12 +325,10 @@ components:
             - type: "null"
         date_of_birth:
           anyOf:
-            - $ref: "#/components/schemas/Date"
+            - $ref: "#/components/schemas/BirthDate"
             - type: "null"
       required: []
       description: Data transfer object for updating all fields of an existing User.
-      x-fiddle-dto-info:
-        baseSchemaName: User
     UserList:
       type: object
       properties:
@@ -366,7 +354,7 @@ components:
             - type: "null"
         date_of_birth:
           anyOf:
-            - $ref: "#/components/schemas/Date"
+            - $ref: "#/components/schemas/BirthDate"
             - type: "null"
       required:
         - given_name

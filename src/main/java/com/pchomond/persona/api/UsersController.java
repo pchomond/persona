@@ -1,17 +1,24 @@
 package com.pchomond.persona.api;
 
+import com.pchomond.persona.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.openapitools.api.UsersApi;
 import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.UpdateUserRequest;
 import org.openapitools.model.User;
 import org.openapitools.model.UserList;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
+@RequiredArgsConstructor
 public class UsersController implements UsersApi {
+
+    private final UserService userService;
 
     @Override
     public ResponseEntity<User> createUser(CreateUserRequest createUserRequest) {
-        return null;
+        return ResponseEntity.ok(userService.createAndValidateUser(createUserRequest));
     }
 
     @Override
