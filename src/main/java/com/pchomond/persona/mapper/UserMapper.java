@@ -38,7 +38,7 @@ public class UserMapper {
                 ? null
                 : UserAddress.builder()
                     .line1(addressDto.getLine1())
-                    .line2(addressDto.getLine2().get())
+                    .line2(addressDto.getLine2() != null ? addressDto.getLine2().orElse(null) : null)
                     .city(addressDto.getCity())
                     .postalCode(addressDto.getPostalCode())
                     .country(addressDto.getCountry())
@@ -57,20 +57,24 @@ public class UserMapper {
     }
 
     private static BirthDate toBirthDate(LocalDate localDate) {
-        return BirthDate.builder()
-                .year(localDate.getYear())
-                .month(localDate.getMonthValue())
-                .day(localDate.getDayOfMonth())
-                .build();
+        return localDate == null
+                ? null
+                : BirthDate.builder()
+                    .year(localDate.getYear())
+                    .month(localDate.getMonthValue())
+                    .day(localDate.getDayOfMonth())
+                    .build();
     }
 
     private static Address toAddress(UserAddress userAddress) {
-        return Address.builder()
-                .line1(userAddress.getLine1())
-                .line2(userAddress.getLine2())
-                .city(userAddress.getCity())
-                .postalCode(userAddress.getPostalCode())
-                .country(userAddress.getCountry())
-                .build();
+        return userAddress == null
+                ? null
+                : Address.builder()
+                    .line1(userAddress.getLine1())
+                    .line2(userAddress.getLine2())
+                    .city(userAddress.getCity())
+                    .postalCode(userAddress.getPostalCode())
+                    .country(userAddress.getCountry())
+                    .build();
     }
 }
