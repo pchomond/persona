@@ -1,4 +1,4 @@
-package com.pchomond.persona.config;
+package com.pchomond.persona.testconfig;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
