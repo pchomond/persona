@@ -1,6 +1,6 @@
 package com.pchomond.persona.repository;
 
-import com.pchomond.persona.annotations.EnablePostgresTestContainer;
+import com.pchomond.persona.testconfig.EnablePostgresTestContainer;
 import com.pchomond.persona.model.UserEntity;
 import com.pchomond.persona.model.UserEntity.UserAddress;
 import org.junit.jupiter.api.BeforeEach;

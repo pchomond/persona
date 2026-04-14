@@ -1,6 +1,5 @@
-package com.pchomond.persona.annotations;
+package com.pchomond.persona.testconfig;
 
-import com.pchomond.persona.config.PostgresTestConfiguration;
 import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
 
