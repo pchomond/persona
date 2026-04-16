@@ -5,7 +5,6 @@ import com.pchomond.persona.model.UserEntity.UserAddress;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.openapitools.jackson.nullable.JsonNullable;
 import org.openapitools.model.Address;
 import org.openapitools.model.BirthDate;
 import org.openapitools.model.CreateUserRequest;
@@ -26,7 +25,7 @@ public class UserMapperTest {
         BirthDate birthDateDto = BirthDate.builder().year(1990).month(5).day(15).build();
         Address addressDto = Address.builder()
                 .line1("123 Main St")
-                .line2(JsonNullable.of("Apt 4B"))
+                .line2("Apt 4B")
                 .city("Springfield")
                 .postalCode("12345")
                 .country("USA")
@@ -115,8 +114,7 @@ public class UserMapperTest {
 
         assertThat(result.getAddress()).isNotNull();
         assertThat(result.getAddress().getLine1()).isEqualTo("456 Oak Ave");
-        assertThat(result.getAddress().getLine2().isPresent()).isTrue();
-        assertThat(result.getAddress().getLine2().get()).isEqualTo("Suite 100");
+        assertThat(result.getAddress().getLine2()).isEqualTo("Suite 100");
         assertThat(result.getAddress().getCity()).isEqualTo("Metropolis");
         assertThat(result.getAddress().getPostalCode()).isEqualTo("67890");
         assertThat(result.getAddress().getCountry()).isEqualTo("USA");

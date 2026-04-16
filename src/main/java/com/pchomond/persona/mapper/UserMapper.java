@@ -9,12 +9,14 @@ import org.openapitools.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 public class UserMapper {
 
     public UserEntity toUserEntity(CreateUserRequest createUserRequest) {
         return UserEntity.builder()
+                .idpId(createUserRequest.getIdpId() != null ? UUID.fromString(createUserRequest.getIdpId()) : null)
                 .surname(createUserRequest.getSurname())
                 .givenName(createUserRequest.getGivenName())
                 .email(createUserRequest.getEmail())
@@ -38,7 +40,7 @@ public class UserMapper {
                 ? null
                 : UserAddress.builder()
                     .line1(addressDto.getLine1())
-                    .line2(addressDto.getLine2() != null ? addressDto.getLine2().orElse(null) : null)
+                    .line2(addressDto.getLine2())
                     .city(addressDto.getCity())
                     .postalCode(addressDto.getPostalCode())
                     .country(addressDto.getCountry())
@@ -47,6 +49,8 @@ public class UserMapper {
 
     public User toUser(UserEntity userEntity) {
         return User.builder()
+                .userId(userEntity.getUserId() != null ? userEntity.getUserId().toString() : null)
+                .idpId(userEntity.getIdpId() != null ? userEntity.getIdpId().toString() : null)
                 .email(userEntity.getEmail())
                 .givenName(userEntity.getGivenName())
                 .surname(userEntity.getSurname())

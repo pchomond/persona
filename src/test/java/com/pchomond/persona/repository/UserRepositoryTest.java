@@ -3,7 +3,6 @@ package com.pchomond.persona.repository;
 import com.pchomond.persona.testconfig.EnablePostgresTestContainer;
 import com.pchomond.persona.model.UserEntity;
 import com.pchomond.persona.model.UserEntity.UserAddress;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
@@ -22,32 +21,34 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private UserEntity user;
-
-    @BeforeEach
-    public void setUp() {
-        // Given
-        user = new UserEntity();
-        user.setUserId(UUID.randomUUID());
-        user.setEmail("foo@bar.com");
-        user.setSurname("Test");
-        user.setGivenName("User");
-        user.setDateOfBirth(LocalDate.of(2000, 1, 1));
-        user.setAddress(UserAddress.builder()
-                .city("City")
-                .line1("Address1")
-                .region("Region")
-                .postalCode("12345")
-                .build());
-
-        // When
-        userRepository.save(user);
-    }
-
     @Test
     void givenUser_WhenSave_ThenFindByUserIdTest() {
-        // Then
-        UserEntity retrievedUser = userRepository.findByUserId(user.getUserId());
-        assertEquals(retrievedUser, user);
+        // given
+        UserEntity userEntity = generateUserEntity();
+        userRepository.save(userEntity);
+
+        // when
+        UserEntity retrievedUser = userRepository.findByUserId(userEntity.getUserId());
+
+        // then
+        assertEquals(retrievedUser, userEntity);
+    }
+
+    private UserEntity generateUserEntity() {
+        return UserEntity.builder()
+                .userId(UUID.randomUUID())
+                .idpId(UUID.randomUUID())
+                .email("test@gmail.com")
+                .givenName("Test")
+                .surname("User")
+                .dateOfBirth(LocalDate.of(1990, 1, 2))
+                .address(UserAddress.builder()
+                        .line1("Abbey Road 1")
+                        .city("Brentford")
+                        .region("London")
+                        .country("UK")
+                        .postalCode("12341")
+                        .build())
+                .build();
     }
 }
