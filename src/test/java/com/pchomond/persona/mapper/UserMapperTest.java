@@ -114,7 +114,6 @@ public class UserMapperTest {
 
         assertThat(result.getAddress()).isNotNull();
         assertThat(result.getAddress().getLine1()).isEqualTo("456 Oak Ave");
-        //assertThat(result.getAddress().getLine2().isPresent()).isTrue();
         assertThat(result.getAddress().getLine2()).isEqualTo("Suite 100");
         assertThat(result.getAddress().getCity()).isEqualTo("Metropolis");
         assertThat(result.getAddress().getPostalCode()).isEqualTo("67890");

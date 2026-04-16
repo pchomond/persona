@@ -87,6 +87,7 @@ public class UserServiceTest {
 
     private static CreateUserRequest generateCreateUserRequest() {
         return CreateUserRequest.builder()
+                .idpId(UUID.randomUUID().toString())
                 .email("test@gmail.com")
                 .givenName("Test")
                 .surname("User")

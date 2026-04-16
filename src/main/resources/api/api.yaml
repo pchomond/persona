@@ -206,7 +206,6 @@ components:
         - surname
         - email
         - user_id
-        - idp_id
       properties:
         user_id:
           type: string
@@ -350,7 +349,6 @@ components:
         - given_name
         - surname
         - email
-        - address
       properties:
         given_name:
           type: string
