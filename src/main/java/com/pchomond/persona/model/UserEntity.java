@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,8 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static java.util.Objects.isNull;
 
 @Builder
 @NoArgsConstructor
@@ -34,6 +37,9 @@ public class UserEntity {
     @Column(name = "user_id", unique = true, nullable = false)
     UUID userId;
 
+    @Column(name = "idp_id", unique = true)
+    UUID idpId;
+
     @Column(name = "email")
     String email;
 
@@ -48,6 +54,13 @@ public class UserEntity {
 
     @Embedded
     UserAddress address;
+
+    @PrePersist
+    private void onCreate() {
+        if (isNull(this.userId)) {
+            this.userId = UUID.randomUUID();
+        }
+    }
 
     @Builder
     @NoArgsConstructor

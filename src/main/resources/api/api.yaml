@@ -205,9 +205,12 @@ components:
         - given_name
         - surname
         - email
-        - id
+        - user_id
+        - idp_id
       properties:
-        id:
+        user_id:
+          type: string
+        idp_id:
           type: string
         email:
           type: string
@@ -247,6 +250,7 @@ components:
           description: A collection of specific field-level validation errors.
         message:
           type: string
+      description: An RFC 7807 compliant error structure describing problem details for HTTP APIs.
     Address:
       type: object
       required:
@@ -261,9 +265,7 @@ components:
         line1:
           type: string
         line2:
-          type:
-            - string
-            - "null"
+          type: string
         region:
           type: string
         country:
@@ -293,6 +295,8 @@ components:
         - given_name
         - surname
       properties:
+        idp_id:
+          type: string
         email:
           type: string
         address:
@@ -341,6 +345,12 @@ components:
       description: Data transfer object returning a list of User objects.
     Profile:
       type: object
+      description: A Profile representation containing information tied to a user.
+      required:
+        - given_name
+        - surname
+        - email
+        - address
       properties:
         given_name:
           type: string
@@ -349,19 +359,9 @@ components:
         email:
           type: string
         address:
-          anyOf:
-            - $ref: "#/components/schemas/Address"
-            - type: "null"
+          $ref: "#/components/schemas/Address"
         date_of_birth:
-          anyOf:
-            - $ref: "#/components/schemas/BirthDate"
-            - type: "null"
-      required:
-        - given_name
-        - surname
-        - email
-        - address
-      description: A Profile contains information tied to a user.
+          $ref: "#/components/schemas/BirthDate"
   responses:
     Conflict:
       content:

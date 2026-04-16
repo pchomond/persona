@@ -108,6 +108,7 @@ public class UserServiceTest {
     private static UserEntity generateUserEntity() {
         return UserEntity.builder()
                 .userId(UUID.randomUUID())
+                .idpId(UUID.randomUUID())
                 .email("test@gmail.com")
                 .givenName("Test")
                 .surname("User")
@@ -124,7 +125,8 @@ public class UserServiceTest {
 
     private static User generateUser() {
         return User.builder()
-                .id(UUID.randomUUID().toString())
+                .userId(UUID.randomUUID().toString())
+                .idpId(UUID.randomUUID().toString())
                 .email("test@gmail.com")
                 .givenName("Test")
                 .surname("User")

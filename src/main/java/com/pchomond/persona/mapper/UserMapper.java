@@ -38,7 +38,7 @@ public class UserMapper {
                 ? null
                 : UserAddress.builder()
                     .line1(addressDto.getLine1())
-                    .line2(addressDto.getLine2() != null ? addressDto.getLine2().orElse(null) : null)
+                    .line2(addressDto.getLine2())
                     .city(addressDto.getCity())
                     .postalCode(addressDto.getPostalCode())
                     .country(addressDto.getCountry())
