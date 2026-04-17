@@ -4,6 +4,7 @@ import com.pchomond.persona.mapper.UserMapper;
 import com.pchomond.persona.model.UserEntity;
 import com.pchomond.persona.model.UserEntity.UserAddress;
 import com.pchomond.persona.repository.UserRepository;
+import com.pchomond.persona.service.validation.UserValidator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,22 +16,24 @@ import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.User;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
     @Mock
     private UserMapper userMapper;
+
+    @Mock
+    private UserValidator userValidator;
 
     @Mock
     private UserRepository userRepository;
@@ -46,7 +49,8 @@ public class UserServiceTest {
         var persistedUserEntity = generateUserEntity();
         var expectedUser = generateUser();
 
-        given(userMapper.toUserEntity(eq(createUserRequest))).willReturn(mappedUserEntity);
+        given(userMapper.toUserEntity(createUserRequest)).willReturn(mappedUserEntity);
+        given(userValidator.validate(mappedUserEntity)).willReturn(Collections.emptyList());
         given(userRepository.save(mappedUserEntity)).willReturn(persistedUserEntity);
         given(userMapper.toUser(persistedUserEntity)).willReturn(expectedUser);
 
@@ -69,10 +73,11 @@ public class UserServiceTest {
         CreateUserRequest createUserRequest = generateCreateUserRequest();
         UserEntity mappedUserEntity = generateUserEntity();
 
-        when(userMapper.toUserEntity(createUserRequest)).thenReturn(mappedUserEntity);
+        given(userMapper.toUserEntity(createUserRequest)).willReturn(mappedUserEntity);
+        given(userValidator.validate(mappedUserEntity)).willReturn(Collections.emptyList());
 
         RuntimeException dbException = new RuntimeException("Database down");
-        when(userRepository.save(any(UserEntity.class))).thenThrow(dbException);
+        given(userRepository.save(any(UserEntity.class))).willThrow(dbException);
 
         // when & then
         assertThatThrownBy(() -> userService.createAndValidateUser(createUserRequest))
