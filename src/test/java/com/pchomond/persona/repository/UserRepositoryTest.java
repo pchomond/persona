@@ -11,7 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -22,16 +22,29 @@ public class UserRepositoryTest {
     private UserRepository userRepository;
 
     @Test
-    void givenUser_WhenSave_ThenFindByUserIdTest() {
+    void givenUser_WhenSave_ThenExistsByIdpIdTest() {
         // given
         UserEntity userEntity = generateUserEntity();
         userRepository.save(userEntity);
 
         // when
-        UserEntity retrievedUser = userRepository.findByUserId(userEntity.getUserId());
+        boolean isUser = userRepository.existsByIdpId(userEntity.getIdpId());
 
         // then
-        assertEquals(retrievedUser, userEntity);
+        assertTrue(isUser);
+    }
+
+    @Test
+    void givenUser_WhenSave_ThenExistsByEmailTest() {
+        // given
+        UserEntity userEntity = generateUserEntity();
+        userRepository.save(userEntity);
+
+        // when
+        boolean isUser = userRepository.existsByEmail(userEntity.getEmail());
+
+        // then
+        assertTrue(isUser);
     }
 
     private UserEntity generateUserEntity() {
