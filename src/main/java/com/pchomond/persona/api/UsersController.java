@@ -25,9 +25,7 @@ public class UsersController implements UsersApi {
 
     @Override
     public ResponseEntity<User> createUser(CreateUserRequest createUserRequest) {
-        List<ErrorDetail> errors = userRequestValidator.validate(createUserRequest);
-
-        if (!errors.isEmpty()) throw new RequestValidationException(errors);
+        userRequestValidator.validate(createUserRequest);
 
         User createdUser = userService.createAndValidateUser(createUserRequest);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);

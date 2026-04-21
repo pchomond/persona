@@ -2,7 +2,6 @@ package com.pchomond.persona.service.validation;
 
 import com.pchomond.persona.model.UserEntity;
 import com.pchomond.persona.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

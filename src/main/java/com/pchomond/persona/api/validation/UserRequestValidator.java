@@ -1,5 +1,6 @@
 package com.pchomond.persona.api.validation;
 
+import com.pchomond.persona.exception.RequestValidationException;
 import lombok.RequiredArgsConstructor;
 import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
 import org.openapitools.model.BirthDate;
@@ -33,7 +34,7 @@ public class UserRequestValidator {
     private final EmailValidator emailValidator;
     private final Clock systemClock;
 
-    public List<ErrorDetail> validate(CreateUserRequest request) {
+    public void validate(CreateUserRequest request) throws RequestValidationException {
         List<ErrorDetail> errors = new ArrayList<>();
 
         if (!emailValidator.isValid(request.getEmail(), null)) {
@@ -45,7 +46,7 @@ public class UserRequestValidator {
             validateBirthDate(birthDate, errors);
         }
 
-        return errors;
+        if (!errors.isEmpty()) throw new RequestValidationException(errors);
     }
 
     private void validateBirthDate(BirthDate birthDate, List<ErrorDetail> errors) {
