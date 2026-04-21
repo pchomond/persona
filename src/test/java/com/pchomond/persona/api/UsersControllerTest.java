@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.openapitools.model.Address;
 import org.openapitools.model.BirthDate;
 import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.ErrorDetail;
 import org.openapitools.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient;
@@ -17,7 +16,6 @@ import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.client.RestTestClient;
 import tools.jackson.databind.ObjectMapper;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
