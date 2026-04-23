@@ -12,8 +12,12 @@ pipeline {
 
     stage('Build') {
       steps {
-        echo 'Compiling and Packaging...'
-        sh 'mvn -B clean package -DskipTests'
+        withMaven(
+          mavenLocalRepo: '/maven-cache'
+        ) {
+          echo 'Compiling and Packaging...'
+          sh 'mvn -B clean package -DskipTests'
+        }
       }
     }
 
