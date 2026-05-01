@@ -23,8 +23,12 @@ pipeline {
 
     stage('Test') {
       steps {
-        echo 'Running Unit Tests...'
-        sh 'mvn -B test'
+        withMaven(
+          mavenLocalRepo: '/maven-cache'
+        ) {
+          echo 'Running Unit Tests...'
+          sh 'mvn -B test'
+        }
       }
       post {
         always {
