@@ -2,7 +2,7 @@ package com.pchomond.persona.api.validation;
 
 import com.pchomond.persona.exception.RequestValidationException;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
+import org.apache.commons.validator.routines.EmailValidator;
 import org.openapitools.model.BirthDate;
 import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.ErrorDetail;
@@ -31,13 +31,12 @@ public class UserRequestValidator {
 
     private static final int MIN_BIRTH_YEAR = 1920;
 
-    private final EmailValidator emailValidator;
     private final Clock systemClock;
 
     public void validate(CreateUserRequest request) throws RequestValidationException {
         List<ErrorDetail> errors = new ArrayList<>();
 
-        if (!emailValidator.isValid(request.getEmail(), null)) {
+        if (!EmailValidator.getInstance().isValid(request.getEmail())) {
             errors.add(new ErrorDetail(FIELD_EMAIL, MSG_INVALID_EMAIL_FORMAT));
         }
 

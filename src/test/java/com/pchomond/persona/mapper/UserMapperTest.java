@@ -28,6 +28,7 @@ public class UserMapperTest {
                 .line2("Apt 4B")
                 .city("Springfield")
                 .postalCode("12345")
+                .region("New Jersey")
                 .country("USA")
                 .build();
 
@@ -55,6 +56,7 @@ public class UserMapperTest {
         assertThat(result.getAddress().getLine2()).isEqualTo("Apt 4B");
         assertThat(result.getAddress().getCity()).isEqualTo("Springfield");
         assertThat(result.getAddress().getPostalCode()).isEqualTo("12345");
+        assertThat(result.getAddress().getRegion()).isEqualTo("New Jersey");
         assertThat(result.getAddress().getCountry()).isEqualTo("USA");
     }
 
@@ -87,6 +89,7 @@ public class UserMapperTest {
                 .line2("Suite 100")
                 .city("Metropolis")
                 .postalCode("67890")
+                .region("Nevada")
                 .country("USA")
                 .build();
 
@@ -117,6 +120,7 @@ public class UserMapperTest {
         assertThat(result.getAddress().getLine2()).isEqualTo("Suite 100");
         assertThat(result.getAddress().getCity()).isEqualTo("Metropolis");
         assertThat(result.getAddress().getPostalCode()).isEqualTo("67890");
+        assertThat(result.getAddress().getRegion()).isEqualTo("Nevada");
         assertThat(result.getAddress().getCountry()).isEqualTo("USA");
     }
 

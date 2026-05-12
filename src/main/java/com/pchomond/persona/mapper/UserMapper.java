@@ -43,6 +43,7 @@ public class UserMapper {
                     .line2(addressDto.getLine2())
                     .city(addressDto.getCity())
                     .postalCode(addressDto.getPostalCode())
+                    .region(addressDto.getRegion())
                     .country(addressDto.getCountry())
                     .build();
     }
@@ -78,6 +79,7 @@ public class UserMapper {
                     .line2(userAddress.getLine2())
                     .city(userAddress.getCity())
                     .postalCode(userAddress.getPostalCode())
+                    .region(userAddress.getRegion())
                     .country(userAddress.getCountry())
                     .build();
     }
