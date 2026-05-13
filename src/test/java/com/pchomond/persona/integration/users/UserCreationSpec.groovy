@@ -1,5 +1,6 @@
 package com.pchomond.persona.integration.users
 
+import com.jayway.jsonpath.DocumentContext
 import com.jayway.jsonpath.JsonPath
 import com.pchomond.persona.testconfig.EnablePostgresTestContainer
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,10 +19,10 @@ import tools.jackson.databind.ObjectMapper
 class UserCreationSpec extends Specification {
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper objectMapper
 
     @Autowired
-    private RestTestClient restTestClient;
+    private RestTestClient restTestClient
 
     def "Should successfully create a user and persist to database"() {
         given: "a valid user creation request payload"
@@ -57,23 +58,25 @@ class UserCreationSpec extends Specification {
 
         and: "the body contains the created User"
         result.requestHeaders.contentType == MediaType.APPLICATION_JSON
-        def json = new String(result.responseBodyContent)
-        path(json, "\$.user_id") != null
-        path(json, "\$.idp_id") == payload.idp_id
-        path(json, "\$.given_name") == payload.given_name
-        path(json, "\$.surname") == payload.surname
-        path(json, "\$.email") == payload.email
-        path(json, "\$.date_of_birth") != null
-        path(json, "\$.date_of_birth.day") == payload.date_of_birth.day
-        path(json, "\$.date_of_birth.month") == payload.date_of_birth.month
-        path(json, "\$.date_of_birth.year") == payload.date_of_birth.year
-        path(json, "\$.address") != null
-        path(json, "\$.address.line1") == payload.address.line1
-        path(json, "\$.address.line2") == payload.address.line2
-        path(json, "\$.address.city") == payload.address.city
-        path(json, "\$.address.postal_code") == payload.address.postal_code
-        path(json, "\$.address.region") == payload.address.region
-        path(json, "\$.address.country") == payload.address.country
+        def document = convertResponseToDocumentContext(result.responseBodyContent)
+        verifyAll(document) {
+            read("\$.user_id") != null
+            read("\$.idp_id") == payload.idp_id
+            read("\$.given_name") == payload.given_name
+            read("\$.surname") == payload.surname
+            read("\$.email") == payload.email
+            read("\$.date_of_birth") != null
+            read("\$.date_of_birth.day") == payload.date_of_birth.day
+            read("\$.date_of_birth.month") == payload.date_of_birth.month
+            read("\$.date_of_birth.year") == payload.date_of_birth.year
+            read("\$.address") != null
+            read("\$.address.line1") == payload.address.line1
+            read("\$.address.line2") == payload.address.line2
+            read("\$.address.city") == payload.address.city
+            read("\$.address.postal_code") == payload.address.postal_code
+            read("\$.address.region") == payload.address.region
+            read("\$.address.country") == payload.address.country
+        }
     }
 
     def "Should reject invalid request with 400 Bad Request"() {
@@ -99,7 +102,8 @@ class UserCreationSpec extends Specification {
         result.requestHeaders.contentType == MediaType.APPLICATION_JSON
     }
 
-    private static Object path(String json, String path) {
-        return JsonPath.read(json, path)
+    private static DocumentContext convertResponseToDocumentContext(byte[] responseBody) {
+        def json = new String(responseBody)
+        return JsonPath.parse(json)
     }
 }
