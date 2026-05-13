@@ -32,7 +32,7 @@ public class UserValidatorTest {
     private UserValidator userValidator;
 
     @Test
-    void validate_shouldReturnEmptyList_whenNonErrorsOccur() {
+    void validate_shouldReturnEmptyList_whenNoErrorsOccur() {
         // given
         var userEntity = generateUserEntity();
 
