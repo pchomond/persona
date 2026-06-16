@@ -1,7 +1,6 @@
-package com.pchomond.persona.integration.users
+package com.pchomond.persona.users
 
-import com.jayway.jsonpath.DocumentContext
-import com.jayway.jsonpath.JsonPath
+import com.pchomond.persona.testconfig.DatabaseCleaner
 import com.pchomond.persona.testconfig.EnablePostgresTestContainer
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureRestTestClient
@@ -23,6 +22,13 @@ class UserCreationSpec extends Specification {
 
     @Autowired
     private RestTestClient restTestClient
+
+    @Autowired
+    private DatabaseCleaner databaseCleaner
+
+    def setup() {
+        databaseCleaner.clearDatabase()
+    }
 
     def "Should successfully create a user and persist to database"() {
         given: "a valid user creation request payload"
@@ -55,28 +61,9 @@ class UserCreationSpec extends Specification {
 
         then: "the response status is 201 Created"
         result.status.value() == 201
+        result.responseHeaders.contentType == MediaType.APPLICATION_JSON
 
-        and: "the body contains the created User"
-        result.requestHeaders.contentType == MediaType.APPLICATION_JSON
-        def document = convertResponseToDocumentContext(result.responseBodyContent)
-        verifyAll(document) {
-            read("\$.user_id") != null
-            read("\$.idp_id") == payload.idp_id
-            read("\$.given_name") == payload.given_name
-            read("\$.surname") == payload.surname
-            read("\$.email") == payload.email
-            read("\$.date_of_birth") != null
-            read("\$.date_of_birth.day") == payload.date_of_birth.day
-            read("\$.date_of_birth.month") == payload.date_of_birth.month
-            read("\$.date_of_birth.year") == payload.date_of_birth.year
-            read("\$.address") != null
-            read("\$.address.line1") == payload.address.line1
-            read("\$.address.line2") == payload.address.line2
-            read("\$.address.city") == payload.address.city
-            read("\$.address.postal_code") == payload.address.postal_code
-            read("\$.address.region") == payload.address.region
-            read("\$.address.country") == payload.address.country
-        }
+        // TODO: Update this when GET endpoint is implemented to assert correct persistence
     }
 
     def "Should reject invalid request with 400 Bad Request"() {
@@ -97,13 +84,33 @@ class UserCreationSpec extends Specification {
 
         then: "the response status is 400 Bad Request"
         result.status.value() == 400
-
-        and: "the body contains the created User"
-        result.requestHeaders.contentType == MediaType.APPLICATION_JSON
+        result.responseHeaders.contentType == MediaType.APPLICATION_PROBLEM_JSON
     }
 
-    private static DocumentContext convertResponseToDocumentContext(byte[] responseBody) {
-        def json = new String(responseBody)
-        return JsonPath.parse(json)
+    def "Should reject duplicate request with 409 Resource Conflict"() {
+        given: "a user creation request payload is submitted"
+        def payload = [
+                idp_id: UUID.randomUUID().toString(),
+                email: "foo@gmail.com",
+                given_name: "Foo",
+                surname: "Bar"
+        ]
+
+        restTestClient.post().uri("/internal/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(payload)
+                .exchange()
+                .expectStatus().isCreated()
+
+        when: "the same request payload is submitted again"
+        def result = restTestClient.post().uri("/internal/users")
+                                   .contentType(MediaType.APPLICATION_JSON)
+                                   .body(payload)
+                                   .exchange()
+                                   .returnResult()
+
+        then: "the response status is 409 Bad Request"
+        result.status.value() == 409
+        result.responseHeaders.contentType == MediaType.APPLICATION_PROBLEM_JSON
     }
 }

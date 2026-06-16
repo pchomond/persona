@@ -29,6 +29,8 @@
     </scm>
     <properties>
         <java.version>25</java.version>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
     </properties>
     <dependencies>
         <dependency>
@@ -193,6 +195,9 @@
                             <inputSpec>${project.basedir}/src/main/resources/api/api.yaml
                             </inputSpec>
                             <generatorName>spring</generatorName>
+                            <schemaMappings>
+                                <schemaMapping>ProblemDetail=org.springframework.http.ProblemDetail</schemaMapping>
+                            </schemaMappings>
                             <configOptions>
                                 <sourceFolder>src/gen/java/main</sourceFolder>
                                 <useJakartaEe>true</useJakartaEe>
@@ -234,8 +239,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <!-- The gmavenplus plugin is used to compile Groovy code. To learn more about this plugin,
-                visit https://github.com/groovy/GMavenPlus/wiki -->
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
                 <version>4.2.1</version>

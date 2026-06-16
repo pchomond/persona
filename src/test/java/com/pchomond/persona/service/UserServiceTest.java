@@ -16,7 +16,6 @@ import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.User;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -50,7 +49,6 @@ public class UserServiceTest {
         var expectedUser = generateUser();
 
         given(userMapper.toUserEntity(createUserRequest)).willReturn(mappedUserEntity);
-        given(userValidator.validate(mappedUserEntity)).willReturn(Collections.emptyList());
         given(userRepository.save(mappedUserEntity)).willReturn(persistedUserEntity);
         given(userMapper.toUser(persistedUserEntity)).willReturn(expectedUser);
 
@@ -74,7 +72,6 @@ public class UserServiceTest {
         UserEntity mappedUserEntity = generateUserEntity();
 
         given(userMapper.toUserEntity(createUserRequest)).willReturn(mappedUserEntity);
-        given(userValidator.validate(mappedUserEntity)).willReturn(Collections.emptyList());
 
         RuntimeException dbException = new RuntimeException("Database down");
         given(userRepository.save(any(UserEntity.class))).willThrow(dbException);
