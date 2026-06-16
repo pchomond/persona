@@ -1,36 +1,42 @@
 package com.pchomond.persona.exception;
 
-import org.openapitools.model.Error;
-import org.springframework.http.HttpStatus;
+import static com.pchomond.persona.exception.domain.GlobalErrorCode.VALIDATION_ERROR;
+
+import com.pchomond.persona.exception.core.ErrorCode;
+import com.pchomond.persona.exception.dto.ValidationProblemDetail;
+import java.time.Instant;
+import java.util.List;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.openapitools.model.FieldViolation;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @RestControllerAdvice
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    private static final String REQUEST_VALIDATION_EXCEPTION_TITLE = "Request Validation";
-    private static final String BUSINESS_VALIDATION_EXCEPTION_TITLE = "Business Validation";
+    @Override
+    protected @Nullable ResponseEntity<Object> handleMethodArgumentNotValid(
+            MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatusCode status,
+            @NonNull WebRequest request) {
+        ValidationProblemDetail pd = new ValidationProblemDetail(
+                VALIDATION_ERROR,
+                extractFieldViolations(ex.getBindingResult())
+        );
 
-    @ExceptionHandler(RequestValidationException.class)
-    public ResponseEntity<Error> handleRequestValidationException(RequestValidationException ex) {
-        var error = Error.builder()
-                .title(REQUEST_VALIDATION_EXCEPTION_TITLE)
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .details(ex.getErrorDetails())
-                .build();
-        return ResponseEntity.badRequest().body(error);
+        return handleExceptionInternal(ex, pd, headers, status, request);
     }
 
-    @ExceptionHandler(BusinessValidationException.class)
-    public ResponseEntity<Error> handleBusinessValidationException(BusinessValidationException ex) {
-        var error = Error.builder()
-                         .title(BUSINESS_VALIDATION_EXCEPTION_TITLE)
-                         .status(HttpStatus.BAD_REQUEST.value())
-                         .message(ex.getMessage())
-                         .details(ex.getErrorDetails())
-                         .build();
-        return ResponseEntity.badRequest().body(error);
+    private static List<FieldViolation> extractFieldViolations(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+                .map(error -> new FieldViolation(error.getField(), error.getDefaultMessage()))
+                .toList();
     }
 }

@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.openapitools.model.BirthDate;
 import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.ErrorDetail;
+import org.openapitools.model.FieldViolation;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
@@ -33,11 +33,11 @@ public class UserRequestValidator {
 
     private final Clock systemClock;
 
-    public void validate(CreateUserRequest request) throws RequestValidationException {
-        List<ErrorDetail> errors = new ArrayList<>();
+    public void validate(CreateUserRequest request) {
+        List<FieldViolation> errors = new ArrayList<>();
 
         if (!EmailValidator.getInstance().isValid(request.getEmail())) {
-            errors.add(new ErrorDetail(FIELD_EMAIL, MSG_INVALID_EMAIL_FORMAT));
+            errors.add(new FieldViolation(FIELD_EMAIL, MSG_INVALID_EMAIL_FORMAT));
         }
 
         BirthDate birthDate = request.getDateOfBirth();
@@ -48,7 +48,7 @@ public class UserRequestValidator {
         if (!errors.isEmpty()) throw new RequestValidationException(errors);
     }
 
-    private void validateBirthDate(BirthDate birthDate, List<ErrorDetail> errors) {
+    private void validateBirthDate(BirthDate birthDate, List<FieldViolation> errors) {
         if (birthDate == null) return;
 
         LocalDate today = LocalDate.now(systemClock);
@@ -57,16 +57,16 @@ public class UserRequestValidator {
         Integer m = birthDate.getMonth();
         Integer y = birthDate.getYear();
 
-        if (y < MIN_BIRTH_YEAR || y > today.getYear()) errors.add(new ErrorDetail(FIELD_DOB_YEAR, MSG_INVALID_YEAR));
-        if (m < 1 || m > 12) errors.add(new ErrorDetail(FIELD_DOB_MONTH, MSG_INVALID_MONTH));
-        if (d < 1 || d > 31) errors.add(new ErrorDetail(FIELD_DOB_DAY, MSG_INVALID_DAY));
+        if (y < MIN_BIRTH_YEAR || y > today.getYear()) errors.add(new FieldViolation(FIELD_DOB_YEAR, MSG_INVALID_YEAR));
+        if (m < 1 || m > 12) errors.add(new FieldViolation(FIELD_DOB_MONTH, MSG_INVALID_MONTH));
+        if (d < 1 || d > 31) errors.add(new FieldViolation(FIELD_DOB_DAY, MSG_INVALID_DAY));
 
         if (!errors.isEmpty()) return;
 
         try {
             LocalDate.of(y, m, d);
         } catch (DateTimeException e) {
-            errors.add(new ErrorDetail(FIELD_DOB, MSG_INVALID_DOB));
+            errors.add(new FieldViolation(FIELD_DOB, MSG_INVALID_DOB));
         }
     }
 }

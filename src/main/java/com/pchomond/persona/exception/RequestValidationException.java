@@ -1,19 +1,21 @@
 package com.pchomond.persona.exception;
 
-import lombok.Getter;
-import org.openapitools.model.ErrorDetail;
+import static com.pchomond.persona.exception.domain.GlobalErrorCode.VALIDATION_ERROR;
 
+import com.pchomond.persona.exception.dto.ValidationProblemDetail;
+import java.util.Collections;
 import java.util.List;
+import lombok.Getter;
+import org.openapitools.model.FieldViolation;
 
 @Getter
-public class RequestValidationException extends RuntimeException {
+public class RequestValidationException extends BaseAppException {
 
-    private static final String EXCEPTION_MESSAGE = "Request validation failed";
+    private final List<FieldViolation> errors;
 
-    private final List<ErrorDetail> errorDetails;
+    public RequestValidationException(List<FieldViolation> errors) {
+        super(VALIDATION_ERROR, new ValidationProblemDetail(VALIDATION_ERROR, errors));
 
-    public RequestValidationException(List<ErrorDetail> errorDetails) {
-        super(EXCEPTION_MESSAGE);
-        this.errorDetails = errorDetails;
+        this.errors = errors != null ? Collections.unmodifiableList(errors) : List.of();
     }
 }
