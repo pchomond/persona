@@ -16,6 +16,6 @@ public class ValidationProblemDetail extends PersonaProblemDetail{
     public ValidationProblemDetail(ErrorCode errorCode, List<FieldViolation> errors) {
         super(errorCode);
 
-        this.errors = errors != null ? Collections.unmodifiableList(errors) : List.of();;
+        this.errors = errors != null ? Collections.unmodifiableList(errors) : List.of();
     }
 }

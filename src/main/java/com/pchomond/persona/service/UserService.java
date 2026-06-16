@@ -9,8 +9,6 @@ import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.User;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {

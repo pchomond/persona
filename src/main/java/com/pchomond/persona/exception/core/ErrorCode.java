@@ -1,7 +1,6 @@
 package com.pchomond.persona.exception.core;
 
 import java.net.URI;
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 /**

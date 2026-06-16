@@ -16,7 +16,6 @@ import org.openapitools.model.CreateUserRequest;
 import org.openapitools.model.User;
 
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

@@ -24,7 +24,7 @@ class UserCreationSpec extends Specification {
     private RestTestClient restTestClient
 
     @Autowired
-    private DatabaseCleaner databaseCleaner;
+    private DatabaseCleaner databaseCleaner
 
     def setup() {
         databaseCleaner.clearDatabase()

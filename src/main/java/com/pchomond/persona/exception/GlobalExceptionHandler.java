@@ -2,16 +2,13 @@ package com.pchomond.persona.exception;
 
 import static com.pchomond.persona.exception.domain.GlobalErrorCode.VALIDATION_ERROR;
 
-import com.pchomond.persona.exception.core.ErrorCode;
 import com.pchomond.persona.exception.dto.ValidationProblemDetail;
-import java.time.Instant;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.openapitools.model.FieldViolation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
