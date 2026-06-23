@@ -1,12 +1,12 @@
 openapi: 3.1.0
 info:
   title: Users API
+  version: 1.0.0
   description: API for managing users of the system
   contact:
     name: Paschalis Chomondozlis
     url: https://pchomond.com
     email: paschalis.chomondozlis@gmail.com
-  version: 1.0.0
 tags:
   - name: profile
   - name: users

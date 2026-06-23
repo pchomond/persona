@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pchomond</groupId>
@@ -196,14 +196,15 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/api.yaml
-                            </inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <schemaMappings>
                                 <schemaMapping>ProblemDetail=org.springframework.http.ProblemDetail</schemaMapping>
                             </schemaMappings>
                             <configOptions>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <sourceFolder>src/main/java</sourceFolder>
+                                <apiPackage>com.pchomond.persona.api.rest.controller</apiPackage>
+                                <modelPackage>com.pchomond.persona.api.rest.model</modelPackage>
                                 <useJakartaEe>true</useJakartaEe>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useTags>true</useTags>

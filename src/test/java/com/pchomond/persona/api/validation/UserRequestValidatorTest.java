@@ -10,15 +10,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.openapitools.model.Address;
-import org.openapitools.model.BirthDate;
-import org.openapitools.model.CreateUserRequest;
+import com.pchomond.persona.api.rest.model.Address;
+import com.pchomond.persona.api.rest.model.BirthDate;
+import com.pchomond.persona.api.rest.model.CreateUserRequest;
 
 import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.UUID;
-import org.openapitools.model.FieldViolation;
+import com.pchomond.persona.api.rest.model.FieldViolation;
 
 import static com.pchomond.persona.exception.domain.GlobalErrorCode.VALIDATION_ERROR;
 import static com.pchomond.persona.validation.UserValidationConstants.FIELD_DOB;

@@ -5,8 +5,8 @@ import com.pchomond.persona.model.UserEntity;
 import com.pchomond.persona.repository.UserRepository;
 import com.pchomond.persona.service.validation.UserValidator;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.User;
+import com.pchomond.persona.api.rest.model.CreateUserRequest;
+import com.pchomond.persona.api.rest.model.User;
 import org.springframework.stereotype.Service;
 
 @Service
