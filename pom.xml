@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.5</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.pchomond</groupId>
@@ -53,6 +53,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -192,14 +196,15 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api/api.yaml
-                            </inputSpec>
+                            <inputSpec>${project.basedir}/src/main/resources/api/openapi.yaml</inputSpec>
                             <generatorName>spring</generatorName>
                             <schemaMappings>
                                 <schemaMapping>ProblemDetail=org.springframework.http.ProblemDetail</schemaMapping>
                             </schemaMappings>
                             <configOptions>
-                                <sourceFolder>src/gen/java/main</sourceFolder>
+                                <sourceFolder>src/main/java</sourceFolder>
+                                <apiPackage>com.pchomond.persona.api.rest.controller</apiPackage>
+                                <modelPackage>com.pchomond.persona.api.rest.model</modelPackage>
                                 <useJakartaEe>true</useJakartaEe>
                                 <interfaceOnly>true</interfaceOnly>
                                 <useTags>true</useTags>
@@ -209,6 +214,43 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>io.zenwave360.sdk</groupId>
+                <artifactId>zenwave-sdk-maven-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <inputSpec>${project.basedir}/src/main/resources/api/asyncapi.yaml</inputSpec>
+                    <skip>false</skip>
+                    <addCompileSourceRoot>true</addCompileSourceRoot>
+                    <addTestCompileSourceRoot>true</addTestCompileSourceRoot>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-asyncapi</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <generatorName>AsyncAPIGenerator</generatorName>
+                            <configOptions>
+                                <role>provider</role>
+                                <templates>SpringKafka</templates>
+                                <modelPackage>com.pchomond.persona.api.event.model</modelPackage>
+                                <consumerApiPackage>com.pchomond.persona.api.event.consumer</consumerApiPackage>
+                                <jsonschema2pojo.includeTypeInfo>true</jsonschema2pojo.includeTypeInfo>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>io.zenwave360.sdk.plugins</groupId>
+                        <artifactId>asyncapi-generator</artifactId>
+                        <version>2.5.3</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

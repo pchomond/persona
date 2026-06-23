@@ -5,7 +5,7 @@ import com.pchomond.persona.exception.core.ErrorCode;
 import java.util.Collections;
 import java.util.List;
 import lombok.Getter;
-import org.openapitools.model.FieldViolation;
+import com.pchomond.persona.api.rest.model.FieldViolation;
 
 @Getter
 public class ValidationProblemDetail extends PersonaProblemDetail{

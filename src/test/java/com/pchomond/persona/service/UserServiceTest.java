@@ -10,10 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.openapitools.model.Address;
-import org.openapitools.model.BirthDate;
-import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.User;
+import com.pchomond.persona.api.rest.model.Address;
+import com.pchomond.persona.api.rest.model.BirthDate;
+import com.pchomond.persona.api.rest.model.CreateUserRequest;
+import com.pchomond.persona.api.rest.model.User;
 
 import java.time.LocalDate;
 import java.util.UUID;

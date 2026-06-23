@@ -3,9 +3,9 @@ package com.pchomond.persona.api.validation;
 import com.pchomond.persona.exception.RequestValidationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.openapitools.model.BirthDate;
-import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.FieldViolation;
+import com.pchomond.persona.api.rest.model.BirthDate;
+import com.pchomond.persona.api.rest.model.CreateUserRequest;
+import com.pchomond.persona.api.rest.model.FieldViolation;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;

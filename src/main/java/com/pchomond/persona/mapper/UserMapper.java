@@ -2,10 +2,10 @@ package com.pchomond.persona.mapper;
 
 import com.pchomond.persona.model.UserEntity;
 import com.pchomond.persona.model.UserEntity.UserAddress;
-import org.openapitools.model.Address;
-import org.openapitools.model.BirthDate;
-import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.User;
+import com.pchomond.persona.api.rest.model.Address;
+import com.pchomond.persona.api.rest.model.BirthDate;
+import com.pchomond.persona.api.rest.model.CreateUserRequest;
+import com.pchomond.persona.api.rest.model.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

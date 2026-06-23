@@ -1,13 +1,13 @@
 package com.pchomond.persona.api;
 
+import com.pchomond.persona.api.rest.controller.UsersApi;
 import com.pchomond.persona.api.validation.UserRequestValidator;
 import com.pchomond.persona.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.openapitools.api.UsersApi;
-import org.openapitools.model.CreateUserRequest;
-import org.openapitools.model.UpdateUserRequest;
-import org.openapitools.model.User;
-import org.openapitools.model.UserList;
+import com.pchomond.persona.api.rest.model.CreateUserRequest;
+import com.pchomond.persona.api.rest.model.UpdateUserRequest;
+import com.pchomond.persona.api.rest.model.User;
+import com.pchomond.persona.api.rest.model.UserList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;

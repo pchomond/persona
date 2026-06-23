@@ -6,7 +6,7 @@ import com.pchomond.persona.exception.dto.ValidationProblemDetail;
 import java.util.List;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.openapitools.model.FieldViolation;
+import com.pchomond.persona.api.rest.model.FieldViolation;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
