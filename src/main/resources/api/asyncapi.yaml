@@ -1,0 +1,116 @@
+asyncapi: 3.1.0
+info:
+  title: Users Lifecycle Events API
+  version: 1.0.0
+  description: Asynchronous event contract for user lifecycle events emitted from the Identity Provider (Keycloak) to the Companion Service.
+  contact:
+    name: Paschalis Chomondozlis
+    url: https://pchomond.com
+    email: paschalis.chomondozlis@gmail.com
+
+channels:
+  userLifecycleEvents:
+    address: 'idp.user.lifecycle.events'
+    messages:
+      UserLifecycleEvent:
+        $ref: '#/components/messages/UserLifecycleEvent'
+
+operations:
+  onUserLifecycleEvent:
+    action: receive
+    channel:
+      $ref: '#/channels/userLifecycleEvents'
+    summary: Consume raw user lifecycle events to synchronize core identity state.
+
+components:
+  messages:
+    UserLifecycleEvent:
+      name: UserLifecycleEvent
+      title: User Lifecycle Event
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/UserEventPayload'
+
+  schemas:
+    UserEventPayload:
+      type: object
+      required:
+        - eventId
+        - subjectId
+        - eventType
+        - timestamp
+      properties:
+        eventId:
+          type: string
+          format: uuid
+          description: Unique idempotency key for this specific event instance.
+        subjectId:
+          type: string
+          description: The universal user ID from the IdP (used as Kafka Partition Key). Maps to idp_id.
+        eventType:
+          type: string
+          enum:
+            - USER_REGISTERED
+            - USER_UPDATED
+            - USER_DELETED
+          description: The lifecycle action that triggered this event.
+        timestamp:
+          type: string
+          format: date-time
+          description: The exact UTC time the event occurred in the IdP.
+        userData:
+          $ref: '#/components/schemas/UserState'
+          description: The core user identity data modified during the event. Present for REGISTERED and UPDATED events.
+
+    UserState:
+      type: object
+      description: A standard representation of the user's mutable identity data (aligned with Create/Update internal requests).
+      properties:
+        email:
+          type: string
+        surname:
+          type: string
+        given_name:
+          type: string
+        address:
+          $ref: "#/components/schemas/Address"
+        date_of_birth:
+          $ref: "#/components/schemas/BirthDate"
+
+    BirthDate:
+      type: object
+      required:
+        - day
+        - month
+        - year
+      properties:
+        day:
+          type: integer
+        month:
+          type: integer
+        year:
+          type: integer
+      description: BirthDate schema
+
+    Address:
+      type: object
+      required:
+        - country
+        - line1
+        - postal_code
+        - region
+        - city
+      properties:
+        city:
+          type: string
+        line1:
+          type: string
+        line2:
+          type: string
+        region:
+          type: string
+        country:
+          type: string
+        postal_code:
+          type: string
+      description: Address schema
